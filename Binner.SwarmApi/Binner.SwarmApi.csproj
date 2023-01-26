@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Authors>Michael Brown</Authors>
+    <Company>Refactor Software</Company>
+    <Description>Provides an interface to the Binner Swarm Api.</Description>
+    <PackageReleaseNotes>Serialize and deserialize any object without decoration/attributes.</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/replaysMike/Binner.SwarmApi</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/replaysMike/Binner.SwarmApi</RepositoryUrl>
+    <PackageTags>binner swarm parts information api refactor software michael brown</PackageTags>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.0</Version>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Binner.io\Binner\Library\Binner.Model\Binner.Model.csproj" />
+  </ItemGroup>
+
+</Project>
