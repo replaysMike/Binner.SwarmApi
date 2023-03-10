@@ -11,9 +11,9 @@
     <PackageProjectUrl>https://github.com/replaysMike/Binner.SwarmApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/replaysMike/Binner.SwarmApi</RepositoryUrl>
     <PackageTags>binner binner.io swarm parts information api swarmapi refactor software michael brown</PackageTags>
-    <AssemblyVersion>1.0.3.0</AssemblyVersion>
-    <FileVersion>1.0.3.0</FileVersion>
-    <Version>1.0.3</Version>
+    <AssemblyVersion>1.0.4.0</AssemblyVersion>
+    <FileVersion>1.0.4.0</FileVersion>
+    <Version>1.0.4</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
