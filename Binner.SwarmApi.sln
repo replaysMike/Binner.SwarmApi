@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Binner.SwarmApi", "Binner.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Binner.SwarmApiTester", "Binner.SwarmApiTester\Binner.SwarmApiTester.csproj", "{E695EFEA-4CEB-4C5A-97AB-D174BE42C128}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Binner.Model", "..\Binner.io\Binner\Library\Binner.Model\Binner.Model.csproj", "{61239BAC-4986-408C-8E4E-12D882DD1C6C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{E695EFEA-4CEB-4C5A-97AB-D174BE42C128}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E695EFEA-4CEB-4C5A-97AB-D174BE42C128}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E695EFEA-4CEB-4C5A-97AB-D174BE42C128}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61239BAC-4986-408C-8E4E-12D882DD1C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61239BAC-4986-408C-8E4E-12D882DD1C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61239BAC-4986-408C-8E4E-12D882DD1C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61239BAC-4986-408C-8E4E-12D882DD1C6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,10 +10,10 @@
     <PackageReleaseNotes>Serialize and deserialize any object without decoration/attributes.</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/replaysMike/Binner.SwarmApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/replaysMike/Binner.SwarmApi</RepositoryUrl>
-    <PackageTags>binner swarm parts information api refactor software michael brown</PackageTags>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
-    <Version>1.0.0</Version>
+    <PackageTags>binner binner.io swarm parts information api swarmapi refactor software michael brown</PackageTags>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
+    <Version>1.0.3</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Binner.io\Binner\Library\Binner.Model\Binner.Model.csproj" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
 </Project>

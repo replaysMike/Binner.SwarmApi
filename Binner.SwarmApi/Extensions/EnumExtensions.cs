@@ -14,6 +14,9 @@ namespace Binner.SwarmApi.Extensions
         {
             // Get the Description attribute value for the enum value
             var fi = value.GetType().GetField(value.ToString() ?? string.Empty);
+            if (fi == null)
+                return string.Empty;
+
             var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
             if (attributes.Length > 0)

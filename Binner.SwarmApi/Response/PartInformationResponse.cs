@@ -1,4 +1,4 @@
-﻿using Binner.Model;
+﻿using Binner.SwarmApi.Model;
 
 namespace Binner.SwarmApi.Response
 {

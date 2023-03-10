@@ -13,6 +13,7 @@ namespace Binner.SwarmApi
         /// </summary>
         /// <param name="request">The search request</param>
         /// <returns>SearchPartResponse</returns>
+        /// <exception cref="TimeoutException"/>
         Task<IApiResponse<Response.SearchPartResponse?>> SearchPartsAsync(SearchPartRequest request);
 
         /// <summary>
@@ -20,18 +21,21 @@ namespace Binner.SwarmApi
         /// </summary>
         /// <param name="partNumber">The part number to search</param>
         /// <returns>SearchPartResponse</returns>
+        /// <exception cref="TimeoutException"/>
         Task<IApiResponse<Response.SearchPartResponse?>> SearchPartsAsync(string partNumber);
 
         /// <summary>
         /// Get information on a part
         /// </summary>
         /// <param name="partNumber">The part number to search</param>
+        /// <exception cref="TimeoutException"/>
         Task<IApiResponse<Model.PartResults?>> GetPartInformationAsync(string partNumber);
 
         /// <summary>
         /// Get information on a part
         /// </summary>
         /// <param name="request">The search request</param>
+        /// <exception cref="TimeoutException"/>
         Task<IApiResponse<Model.PartResults?>> GetPartInformationAsync(PartInformationRequest request);
     }
 }

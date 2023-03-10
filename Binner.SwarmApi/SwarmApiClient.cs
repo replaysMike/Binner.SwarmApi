@@ -11,8 +11,9 @@ namespace Binner.SwarmApi
     /// </summary>
     public class SwarmApiClient : ISwarmApiClient
     {
-        private readonly SwarmApiConfiguration _configuration = new SwarmApiConfiguration();
-        private static readonly Lazy<HttpClient> _httpClient = new Lazy<HttpClient>(() => CreateHttpClient());
+        private readonly string ApiKeyHeaderName = "X-ApiKey";
+        private readonly SwarmApiConfiguration _configuration = new();
+        private readonly Lazy<HttpClient> _httpClient;
         private enum Endpoints
         {
             [Description("part/search")]
@@ -27,6 +28,7 @@ namespace Binner.SwarmApi
         /// </summary>
         public SwarmApiClient()
         {
+            _httpClient = new Lazy<HttpClient>(() => CreateHttpClient(_configuration));
         }
 
         /// <summary>
@@ -37,6 +39,7 @@ namespace Binner.SwarmApi
         public SwarmApiClient(SwarmApiConfiguration configuration)
         {
             _configuration = configuration;
+            _httpClient = new Lazy<HttpClient>(() => CreateHttpClient(configuration));
         }
 
         /// <summary>
@@ -55,28 +58,31 @@ namespace Binner.SwarmApi
         /// <param name="request">The search request</param>
         public async Task<IApiResponse<Response.SearchPartResponse?>> SearchPartsAsync(Request.SearchPartRequest request)
         {
-            var json = JsonConvert.SerializeObject(request);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-
             var endpoint = new Uri(_configuration.Endpoint, Endpoints.Search.GetDescription());
-            var response = await _httpClient.Value.PostAsync(endpoint, data);
-            var responseString = await response.Content.ReadAsStringAsync();
-            var instance = JsonConvert.DeserializeObject<Model.ServiceResult<Response.SearchPartResponse>>(responseString);
+            var content = CreateSerializedRequest(request);
 
-            var errors = new List<string>();
-            errors.AddRange(ProcessThrottleResponse(response, responseString, out var retryIn));
-            if (instance?.Errors?.Any() == true)
-                errors.AddRange(instance.Errors);
-
-            return new ApiResponse<Response.SearchPartResponse?>
+            try
             {
-                Response = instance.Response,
-                IsSuccessful = response.IsSuccessStatusCode,
-                IsRequestThrottled = response.StatusCode == System.Net.HttpStatusCode.TooManyRequests,
-                RetryIn = TimeSpan.FromSeconds(retryIn),
-                StatusCode = (int)response.StatusCode,
-                Errors = instance.Errors ?? new List<string>()
-            };
+                var response = await _httpClient.Value.PostAsync(endpoint, content);
+                var (instance, retryIn, errors) =
+                    await GetResponseAsync<Model.ServiceResult<Response.SearchPartResponse>>(response);
+                if (instance?.Errors?.Any() == true)
+                    errors.AddRange(instance.Errors);
+
+                return new ApiResponse<Response.SearchPartResponse?>
+                {
+                    Response = instance?.Response,
+                    IsSuccessful = response.IsSuccessStatusCode,
+                    IsRequestThrottled = response.StatusCode == System.Net.HttpStatusCode.TooManyRequests,
+                    RetryIn = TimeSpan.FromSeconds(retryIn),
+                    StatusCode = (int)response.StatusCode,
+                    Errors = errors
+                };
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new TimeoutException($"Api request timeout ({_configuration.Timeout}) exceeded!", ex.GetBaseException());
+            }
         }
 
         /// <summary>
@@ -95,41 +101,84 @@ namespace Binner.SwarmApi
         /// <param name="request">The search request</param>
         public async Task<IApiResponse<Model.PartResults?>> GetPartInformationAsync(Request.PartInformationRequest request)
         {
-            var json = JsonConvert.SerializeObject(request);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-
             var endpoint = new Uri(_configuration.Endpoint, Endpoints.Info.GetDescription());
-            var response = await _httpClient.Value.PostAsync(endpoint, data);
-            var responseString = await response.Content.ReadAsStringAsync();
-            var instance = JsonConvert.DeserializeObject<Model.ServiceResult<Model.PartResults>>(responseString);
-
-            var errors = new List<string>();
-            errors.AddRange(ProcessThrottleResponse(response, responseString, out var retryIn));
-            if (instance?.Errors?.Any() == true)
-                errors.AddRange(instance.Errors);
-
-            return new ApiResponse<Model.PartResults?>
+            var content = CreateSerializedRequest(request);
+            try
             {
-                Response = instance.Response,
-                IsSuccessful = response.IsSuccessStatusCode,
-                IsRequestThrottled = response.StatusCode == System.Net.HttpStatusCode.TooManyRequests,
-                RetryIn = TimeSpan.FromSeconds(retryIn),
-                StatusCode = (int)response.StatusCode,
-                Errors = errors
-            };
+                var response = await _httpClient.Value.PostAsync(endpoint, content);
+                var (instance, retryIn, errors) =
+                    await GetResponseAsync<Model.ServiceResult<Model.PartResults>>(response);
+                if (instance?.Errors?.Any() == true)
+                    errors.AddRange(instance.Errors);
+                return new ApiResponse<Model.PartResults?>
+                {
+                    Response = instance?.Response,
+                    IsSuccessful = response.IsSuccessStatusCode,
+                    IsRequestThrottled = response.StatusCode == System.Net.HttpStatusCode.TooManyRequests,
+                    RetryIn = TimeSpan.FromSeconds(retryIn),
+                    StatusCode = (int)response.StatusCode,
+                    Errors = errors
+                };
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new TimeoutException($"Api request timeout ({_configuration.Timeout}) exceeded!", ex.GetBaseException());
+            }
         }
 
+        /// <summary>
+        /// Get the response object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        private async Task<(T? instance, int retryIn, List<string> errors)> GetResponseAsync<T>(HttpResponseMessage response)
+        {
+            var responseString = await response.Content.ReadAsStringAsync();
+            var instance = JsonConvert.DeserializeObject<T>(responseString);
+            var errors = new List<string>();
+            if (instance == null)
+                errors.Add($"Unknown response received! '{responseString}'");
+            errors.AddRange(ProcessThrottleResponse(response, responseString, out var retryIn));
+            return (instance, retryIn, errors);
+        }
+
+        /// <summary>
+        /// Create a content object to issue the request with
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private StringContent CreateSerializedRequest(object request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var jsonString = new StringContent(json, Encoding.UTF8, "application/json");
+            if (!string.IsNullOrEmpty(_configuration.ApiKey))
+                jsonString.Headers.Add(ApiKeyHeaderName, _configuration.ApiKey);
+            return jsonString;
+        }
+
+        /// <summary>
+        /// Check the response for a 429 status code. If found parse the throttle response
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="responseString"></param>
+        /// <param name="retryIn"></param>
+        /// <returns></returns>
         private List<string> ProcessThrottleResponse(HttpResponseMessage response, string responseString, out int retryIn)
         {
             retryIn = 0;
             if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
             {
-                var throttleResponse = JsonConvert.DeserializeObject<ThrottleResponse>(responseString);
                 if (response.Headers.TryGetValues("Retry-After", out var values))
                 {
                     var retryInStr = values.First();
                     int.TryParse(retryInStr, out retryIn);
                 }
+
+                var throttleResponse = JsonConvert.DeserializeObject<ThrottleResponse>(responseString);
+                if (throttleResponse == null)
+                    return new List<string> { $"Request was throttled, but received unknown response! '{responseString}'" };
+
                 return new List<string>()
                 {
                     $"{throttleResponse.Message} {throttleResponse.Details}"
@@ -138,14 +187,23 @@ namespace Binner.SwarmApi
             return new List<string>();
         }
 
-        private static HttpClient CreateHttpClient()
+        private static HttpClient CreateHttpClient(SwarmApiConfiguration configuration)
         {
             // recommended practice for using HttpClient outside of dependency injection
             var handler = new SocketsHttpHandler
             {
-                PooledConnectionLifetime = TimeSpan.FromMinutes(15) // Recreate every 15 minutes
+                AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
+                // Recreate every 15 minutes
+                PooledConnectionLifetime = configuration.PooledConnectionLifetime,
+                ConnectTimeout = configuration.ConnectTimeout,
+                ResponseDrainTimeout = configuration.ResponseDrainTimeout,
             };
-            return new HttpClient(handler);
+            var client = new HttpClient(handler);
+
+            // set the request timeout
+            client.Timeout = configuration.Timeout;
+
+            return client;
         }
     }
 }
