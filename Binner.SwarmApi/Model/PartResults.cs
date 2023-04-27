@@ -1,4 +1,6 @@
-﻿namespace Binner.SwarmApi.Model
+﻿using Newtonsoft.Json;
+
+namespace Binner.SwarmApi.Model
 {
     public class PartResults
     {
@@ -90,6 +92,7 @@
             Manufacturer = manufacturer;
         }
 
+        [JsonConstructor]
         public DatasheetSource(Guid resourceId, int imageCount, int pageCount, string? imageUrl, string datasheetUrl, string title, string description, string manufacturer, string? originalUrl, string? productUrl)
         {
             ResourceId = resourceId;
