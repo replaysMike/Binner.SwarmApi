@@ -63,7 +63,7 @@
         public int? StockAvailable { get; set; }
 
         /// <summary>
-        /// Manufacturer/factory lead time
+        /// Supplier lead time
         /// </summary>
         public string? LeadTime { get; set; }
 
