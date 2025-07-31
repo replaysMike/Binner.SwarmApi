@@ -11,6 +11,11 @@
         public int Rank { get; set; }
 
         /// <summary>
+        /// A unique key to reference this record
+        /// </summary>
+        public Guid Key { get; set; } = Guid.NewGuid();
+
+        /// <summary>
         /// Add a link to the part number manufacturer (Swarm)
         /// </summary>
         public int? SwarmPartNumberManufacturerId { get; set; }
@@ -51,6 +56,11 @@
         public double Cost { get; set; }
 
         /// <summary>
+        /// Total Cost for part (order line item total cost)
+        /// </summary>
+        public double TotalCost { get; set; }
+
+        /// <summary>
         /// Cost currency
         /// </summary>
         public string? Currency { get; set; }
@@ -69,6 +79,11 @@
         /// Type name of part
         /// </summary>
         public string? PartType { get; set; }
+
+        /// <summary>
+        /// Type id of part
+        /// </summary>
+        public long PartTypeId { get; set; }
 
         /// <summary>
         /// Mounting type of part
@@ -106,6 +121,11 @@
         public long QuantityAvailable { get; set; }
 
         /// <summary>
+        /// Quantity of parts in order
+        /// </summary>
+        public long Quantity { get; set; }
+
+        /// <summary>
         /// Minimum order quanity
         /// </summary>
         public int MinimumOrderQuantity { get; set; }
@@ -124,5 +144,55 @@
         /// Custom reference value
         /// </summary>
         public string? Reference { get; set; }
+
+        /// <summary>
+        /// The internal part id for manually added suppliers
+        /// </summary>
+        public long? PartSupplierId { get; set; }
+
+        /// <summary>
+        /// The name of the product series, if available
+        /// </summary>
+        public string? Series { get; set; }
+
+        /// <summary>
+        /// Rohs status
+        /// </summary>
+        public string? RohsStatus { get; set; }
+
+        /// <summary>
+        /// Reach status
+        /// </summary>
+        public string? ReachStatus { get; set; }
+
+        /// <summary>
+        /// Moisture sensitivity level
+        /// </summary>
+        public string? MoistureSensitivityLevel { get; set; }
+
+        /// <summary>
+        /// Export control class
+        /// </summary>
+        public string? ExportControlClassNumber { get; set; }
+
+        /// <summary>
+        /// Htsus code
+        /// </summary>
+        public string? HtsusCode { get; set; }
+
+        /// <summary>
+        /// The packaging the part is available in
+        /// </summary>
+        public string? Packaging { get; set; }
+
+        /// <summary>
+        /// List of all parametrics for part
+        /// </summary>
+        public ICollection<PartParametric>? Parametrics { get; set; }
+
+        /// <summary>
+        /// List of all cad models for part
+        /// </summary>
+        public ICollection<PartModel>? Models { get; set; }
     }
 }

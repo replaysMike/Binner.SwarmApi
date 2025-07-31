@@ -1,16 +1,16 @@
 ﻿namespace Binner.SwarmApi.Model
 {
-    public class PartNumberManufacturerModel
+    public class PartModel
     {
         /// <summary>
         /// Primary key
         /// </summary>
-        public int PartNumberManufacturerModelId { get; set; }
+        public long PartModelId { get; set; }
 
         /// <summary>
-        /// The part number
+        /// The associated part
         /// </summary>
-        public int PartNumberManufacturerId { get; set; }
+        public long PartId { get; set; }
 
         /// <summary>
         /// Name of model
@@ -36,5 +36,15 @@
         /// Provided if the model has a url associated with it
         /// </summary>
         public string? Url { get; set; }
+
+        /// <summary>
+        /// Creation date
+        /// </summary>
+        public DateTime DateCreatedUtc { get; set; }
+
+        /// <summary>
+        /// Modification date
+        /// </summary>
+        public DateTime DateModifiedUtc { get; set; }
     }
 }
