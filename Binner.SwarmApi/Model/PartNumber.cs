@@ -53,6 +53,11 @@
         public long? PartTypeId { get; set; }
 
         /// <summary>
+        /// Part type name
+        /// </summary>
+        public string? PartType { get; set; }
+
+        /// <summary>
         /// Unique resource Id.
         /// Indicates the file name & path on the resource server for associated images
         /// </summary>
