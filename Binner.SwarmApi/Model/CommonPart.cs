@@ -11,6 +11,11 @@
         public int Rank { get; set; }
 
         /// <summary>
+        /// The local part id, if it exists in inventory
+        /// </summary>
+        public long? PartId { get; set; }
+
+        /// <summary>
         /// A unique key to reference this record
         /// </summary>
         public Guid Key { get; set; } = Guid.NewGuid();
@@ -53,12 +58,12 @@
         /// <summary>
         /// Cost for part from this supplier
         /// </summary>
-        public double Cost { get; set; }
+        public decimal Cost { get; set; }
 
         /// <summary>
         /// Total Cost for part (order line item total cost)
         /// </summary>
-        public double TotalCost { get; set; }
+        public decimal TotalCost { get; set; }
 
         /// <summary>
         /// Cost currency
@@ -194,5 +199,15 @@
         /// List of all cad models for part
         /// </summary>
         public ICollection<PartModel>? Models { get; set; }
+
+        /// <summary>
+        /// List of categories associated with the part
+        /// </summary>
+        public ICollection<CommonCategory> Categories { get; set; } = new List<CommonCategory>();
+
+        /// <summary>
+        /// Date the part was last modified
+        /// </summary>
+        public DateTime DateModifiedUtc { get; set; }
     }
 }

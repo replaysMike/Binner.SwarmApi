@@ -83,9 +83,21 @@
         /// </summary>
         public int? CreatedFromSupplierId { get; set; }
 
+        public Guid GlobalId { get; set; }
+
         /// <summary>
         /// Part numbers by manufacturer related to this part
         /// </summary>
         public ICollection<PartNumberManufacturer>? PartNumberManufacturers { get; set; }
+
+        /// <summary>
+        /// List of pinouts available for part
+        /// </summary>
+        public ICollection<Pinout> Pinouts { get; set; } = new List<Pinout>();
+
+        /// <summary>
+        /// List of circuits available for part
+        /// </summary>
+        public ICollection<Circuit> Circuits { get; set; } = new List<Circuit>();
     }
 }

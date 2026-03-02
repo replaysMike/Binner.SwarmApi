@@ -38,6 +38,11 @@
         public long? PartTypeId { get; set; }
 
         /// <summary>
+        /// Part type name
+        /// </summary>
+        public string? PartType { get; set; }
+
+        /// <summary>
         /// Manufacturer, null indicates unknown
         /// </summary>
         public int? ManufacturerId { get; set; }
@@ -68,46 +73,6 @@
         public bool IsObsolete { get; set; }
 
         /// <summary>
-        /// The stock currently available by the manufacturer/factory
-        /// </summary>
-        public int? FactoryStockAvailable { get; set; }
-
-        /// <summary>
-        /// Manufacturer/factory lead time
-        /// </summary>
-        public string? FactoryLeadTime { get; set; }
-
-        /// <summary>
-        /// The name of the product series, if available
-        /// </summary>
-        public string? Series { get; set; }
-
-        /// <summary>
-        /// Rohs status
-        /// </summary>
-        public string? RohsStatus { get; set; }
-
-        /// <summary>
-        /// Reach status
-        /// </summary>
-        public string? ReachStatus { get; set; }
-
-        /// <summary>
-        /// Moisture sensitivity level
-        /// </summary>
-        public string? MoistureSensitivityLevel { get; set; }
-
-        /// <summary>
-        /// Export control class
-        /// </summary>
-        public string? ExportControlClassNumber { get; set; }
-
-        /// <summary>
-        /// Htsus code
-        /// </summary>
-        public string? HtsusCode { get; set; }
-
-        /// <summary>
         /// If this part was imported from a supplier API (DigiKey, Mouser) indicate which one
         /// </summary>
         public int? CreatedFromSupplierId { get; set; }
@@ -127,7 +92,9 @@
         /// </summary>
         public DateTime DateCreatedUtc { get; set; }
 
-        public ICollection<PartNumberManufacturerImageMetadata> ImageMetadata { get; set; } = null!;
-        public ICollection<DatasheetBasic> Datasheets { get; set; } = null!;
+        public ICollection<PartNumberManufacturerProductImage> ImageMetadata { get; set; } = new List<PartNumberManufacturerProductImage>();
+        public ICollection<DatasheetBasic> Datasheets { get; set; } = new List<DatasheetBasic>();
+        public ICollection<Pinout> Pinouts { get; set; } = new List<Pinout>();
+        public ICollection<Circuit> Circuits { get; set; } = new List<Circuit>();
     }
 }

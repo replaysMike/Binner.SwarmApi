@@ -23,18 +23,47 @@ namespace Binner.SwarmApi.Model
         /// <summary>
         /// The resource server Url of the datasheet and it's associated content
         /// </summary>
-        public string ResourceSourceUrl { get; set; } = null!;
+        public string? ResourceSourceUrl { get; set; }
 
         /// <summary>
         /// The resource path of the datasheet and it's associated content
         /// </summary>
-        public string ResourcePath { get; set; } = null!;
+        public string? ResourcePath { get; set; }
 
         /// <summary>
         /// The short one-line description of the datasheet
         /// </summary>
         [MaxLength(255)]
         public string? ShortDescription { get; set; }
+
+        /// <summary>
+        /// The public description/synopsis of datasheet
+        /// </summary>
+        [MaxLength(4096)]
+        public string? Description { get; set; }
+
+        /// <summary>
+        ///  List of applications indicated by the original PDF
+        /// </summary>
+        [MaxLength(2048)]
+        public string? Applications { get; set; }
+
+        /// <summary>
+        /// List of features indicated by the original PDF
+        /// </summary>
+        [MaxLength(4096)]
+        public string? Features { get; set; }
+
+        /// <summary>
+        /// Absolute maximum ratings (JSON or text)
+        /// </summary>
+        [MaxLength(2048)]
+        public string? AbsoluteMaximumRatings { get; set; }
+
+        /// <summary>
+        /// Comma delimited list of available packages
+        /// </summary>
+        public string? Packages { get; set; }
 
         /// <summary>
         /// Title indicated by the original PDF
